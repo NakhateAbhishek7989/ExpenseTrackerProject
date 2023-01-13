@@ -1,0 +1,96 @@
+﻿@using ExpenseTrackerApplication;
+@model dynamic
+
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<html>
+<head>
+   
+</head>
+<body>
+    <div class="jumbotron" style="color:white;background-color:gray">
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Expenses Limit</h3>
+                <h4 id="showTotExplimit"></h4>
+            </div>
+            <div class="col-md-4">
+                <h3>Total Expenses</h3>
+                <h4 id="showTotExp"></h4>
+            </div>
+            <div class="col-md-4">
+                <h3>Remaining Limit</h3>
+                <h4 id="showRemExp"></h4>
+            </div>
+        </div>
+    </div>
+   
+
+    <h2>Category List</h2>
+    <table class="table" style="color:white;background-color:black">
+        <tr>
+            <th>Category Name</th>
+            <th>Category Limit</th>
+        </tr>
+        @foreach (ExpenseTrackerApplication.Models.category cn in Model.catelist)
+
+        {
+            <tr>
+                <td>
+                    @cn.Category_Name
+                </td>
+                <td>
+                    @cn.Category_Limit
+                </td>
+
+                <td>
+                    <a href="https://localhost:44379/categories/Edit/@cn.ID" class="btn btn-primary">Edit</a> |
+                    <a href="https://localhost:44379/categories/Delete/@cn.ID" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+        </table>
+    <br>
+    <br />
+    <h2>Expenses List</h2>
+    <table class="table" style="color:white;background-color:black" >
+        <tr style="color:white;background-color:black">
+            <th>Title</th>
+            <th>Description</th>
+            <th>Amount</th>
+            <th>Category_ID</th>
+            <th>Date_Time</th>
+        </tr>
+        @foreach(ExpenseTrackerApplication.Models.expense ex in Model.explist)
+            {
+                <tr>
+                    <td>@ex.Title</td>
+                    <td>@ex.Description</td>
+                    <td id="amount">@ex.Amount</td>
+                    <td>
+                        @foreach(ExpenseTrackerApplication.Models.category ct in Model.catelist)
+                        {
+                            if(@ct.ID == ex.Category_ID)
+                            {
+                                @ct.Category_Name
+                            }
+                        }
+                    </td>
+                    <td>@ex.Date_Time</td>
+
+                    <td>
+                        <a href="https://localhost:44379/expenses/Edit/@ex.ID" class="btn btn-primary">Edit</a> |
+                        <a href="https://localhost:44379/expenses/Delete/@ex.ID" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+    </table>
+    <script src="~/Scripts/app.js"></script>
+</body>
+</html>
+
+
+
+

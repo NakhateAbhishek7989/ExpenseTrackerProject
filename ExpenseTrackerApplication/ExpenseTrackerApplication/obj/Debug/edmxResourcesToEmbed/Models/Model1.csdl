@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ExpenseTrakerAppModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="category">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Category_Name" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Category_Limit" Type="Decimal" Precision="18" Scale="0" />
+    <NavigationProperty Name="expenses" Relationship="Self.FK_expense_category" FromRole="category" ToRole="expense" />
+  </EntityType>
+  <EntityType Name="expense">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Title" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Category_ID" Type="Int32" />
+    <Property Name="Date_Time" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="category" Relationship="Self.FK_expense_category" FromRole="expense" ToRole="category" />
+  </EntityType>
+  <Association Name="FK_expense_category">
+    <End Role="category" Type="Self.category" Multiplicity="0..1" />
+    <End Role="expense" Type="Self.expense" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="category">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="expense">
+        <PropertyRef Name="Category_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ExpenseTrakerAppEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="categories" EntityType="Self.category" />
+    <EntitySet Name="expenses" EntityType="Self.expense" />
+    <AssociationSet Name="FK_expense_category" Association="Self.FK_expense_category">
+      <End Role="category" EntitySet="categories" />
+      <End Role="expense" EntitySet="expenses" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
